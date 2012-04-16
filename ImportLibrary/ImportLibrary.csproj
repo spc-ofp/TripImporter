@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{053B6801-DECD-42CA-A840-AD3B74ED52BF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ImportLibrary</RootNamespace>
+    <AssemblyName>ImportLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AutoMapper">
+      <HintPath>..\packages\AutoMapper.2.1.266\lib\net40\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="FluentNHibernate">
+      <HintPath>..\packages\FluentNHibernate.1.3.0.717\lib\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="LegacyObserverDal, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="log4net">
+      <HintPath>..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\packages\NHibernate.3.2.0.4000\lib\Net35\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="nunit.framework, Version=2.6.0.12051, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Spc.Ofp.Common.Repo, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>..\packages\System.Data.SQLite.1.0.80.0\lib\net40\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.SQLite.Linq">
+      <HintPath>..\packages\System.Data.SQLite.1.0.80.0\lib\net40\System.Data.SQLite.Linq.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TubsDAL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AutoMapperConfiguration.cs" />
+    <Compile Include="Converters\MarineDeviceTypeConverter.cs" />
+    <Compile Include="Converters\ObserverTypeConverter.cs" />
+    <Compile Include="Converters\PortTypeConverter.cs" />
+    <Compile Include="Converters\VesselTypeConverter.cs" />
+    <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="EcObservableCollection.cs" />
+    <Compile Include="PendingTripService.cs" />
+    <Compile Include="Profiles\ActivityProfile.cs" />
+    <Compile Include="Profiles\CrewProfile.cs" />
+    <Compile Include="Profiles\ElectronicDeviceProfile.cs" />
+    <Compile Include="Profiles\GearProfile.cs" />
+    <Compile Include="Profiles\LengthHeaderProfile.cs" />
+    <Compile Include="Profiles\LengthSampleProfile.cs" />
+    <Compile Include="Profiles\PollutionDetailProfile.cs" />
+    <Compile Include="Profiles\PollutionEventProfile.cs" />
+    <Compile Include="Profiles\SafetyInspectionProfile.cs" />
+    <Compile Include="Profiles\SeaDayProfile.cs" />
+    <Compile Include="Profiles\SetCatchProfile.cs" />
+    <Compile Include="Profiles\SightingProfile.cs" />
+    <Compile Include="Profiles\SpecialSpeciesInteractionProfile.cs" />
+    <Compile Include="Profiles\TransferProfile.cs" />
+    <Compile Include="Profiles\TripMonitorProfile.cs" />
+    <Compile Include="Profiles\TripProfile.cs" />
+    <Compile Include="Profiles\VesselAttributesProfile.cs" />
+    <Compile Include="Profiles\VesselNotesProfile.cs" />
+    <Compile Include="Profiles\WellContentProfile.cs" />
+    <Compile Include="Profiles\WellReconciliationProfile.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resolvers\ActionTypeResolver.cs" />
+    <Compile Include="Resolvers\ActionTypeStringResolver.cs" />
+    <Compile Include="Resolvers\ActivityTypeResolver.cs" />
+    <Compile Include="Resolvers\AssociationTypeResolver.cs" />
+    <Compile Include="Resolvers\BaseStringResolver.cs" />
+    <Compile Include="Resolvers\ConditionCodeResolver.cs" />
+    <Compile Include="Resolvers\DetectionMethodResolver.cs" />
+    <Compile Include="Resolvers\FormVersionResolver.cs" />
+    <Compile Include="Resolvers\InteractionActivityResolver.cs" />
+    <Compile Include="Resolvers\JobResolver.cs" />
+    <Compile Include="Resolvers\LengthCodeResolver.cs" />
+    <Compile Include="Resolvers\LengthUnitResolver.cs" />
+    <Compile Include="Resolvers\LifejacketAvailabilityResolver.cs" />
+    <Compile Include="Resolvers\LifeJacketProvidedResolver.cs" />
+    <Compile Include="Resolvers\PollutionMaterialResolver.cs" />
+    <Compile Include="Resolvers\PollutionTypeResolver.cs" />
+    <Compile Include="Resolvers\ProgramCodeResolver.cs" />
+    <Compile Include="Resolvers\SamplingProtocolResolver.cs" />
+    <Compile Include="Resolvers\SeaCodeResolver.cs" />
+    <Compile Include="Profiles\SetProfile.cs" />
+    <Compile Include="Resolvers\SexCodeResolver.cs" />
+    <Compile Include="Resolvers\SgTypeResolver.cs" />
+    <Compile Include="Resolvers\SightedVesselResolver.cs" />
+    <Compile Include="Resolvers\SpillSourceResolver.cs" />
+    <Compile Include="Resolvers\UsageCodeResolver.cs" />
+    <Compile Include="Resolvers\VesselTypeResolver.cs" />
+    <Compile Include="Resolvers\WellContentTypeResolver.cs" />
+    <Compile Include="Resolvers\WellLocationResolver.cs" />
+    <Compile Include="Resolvers\YesNoResolver.cs" />
+    <Compile Include="StringExtensions.cs" />
+    <Compile Include="Tests\ActivityTest.cs" />
+    <Compile Include="Tests\CrewTest.cs" />
+    <Compile Include="Tests\ElectronicDeviceTest.cs" />
+    <Compile Include="Tests\GearTest.cs" />
+    <Compile Include="Tests\LengthSampleTest.cs" />
+    <Compile Include="Tests\MapperSetup.cs" />
+    <Compile Include="Tests\MarineDeviceTest.cs" />
+    <Compile Include="Tests\PollutionTest.cs" />
+    <Compile Include="Tests\SafetyInspectionTest.cs" />
+    <Compile Include="Tests\SeaDayTest.cs" />
+    <Compile Include="Tests\SetCatchTest.cs" />
+    <Compile Include="Tests\SetTest.cs" />
+    <Compile Include="Tests\SightingTest.cs" />
+    <Compile Include="Tests\SpecialSpeciesInteractionTest.cs" />
+    <Compile Include="Tests\TransferTest.cs" />
+    <Compile Include="Tests\TripMonitorTest.cs" />
+    <Compile Include="Tests\TripTest.cs" />
+    <Compile Include="Tests\VesselAttributesTest.cs" />
+    <Compile Include="Tests\VesselNotesTest.cs" />
+    <Compile Include="Tests\WellContentTest.cs" />
+    <Compile Include="Tests\WellReconciliationTest.cs" />
+    <Compile Include="TripViewModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="externals\LegacyObserverDal.dll" />
+    <Content Include="externals\Spc.Ofp.Common.Repo.dll" />
+    <Content Include="externals\TubsDAL.dll" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

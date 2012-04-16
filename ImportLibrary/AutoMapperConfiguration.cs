@@ -1,0 +1,49 @@
+﻿// -----------------------------------------------------------------------
+// <copyright file="AutoMapperConfiguration.cs" company="Secretariat of the Pacific Community">
+// Copyright (C) 2012 Secretariat of the Pacific Community
+// </copyright>
+// -----------------------------------------------------------------------
+
+namespace ImportLibrary
+{
+    using AutoMapper;
+    using ImportLibrary.Profiles;
+
+    /// <summary>
+    /// TODO: Update summary.
+    /// </summary>
+    public class AutoMapperConfiguration
+    {
+        public static void Configure()
+        {
+            Mapper.Initialize(cfg =>
+                {
+                    cfg.AddProfile<ActivityProfile>();
+                    cfg.AddProfile<CrewProfile>();
+                    cfg.AddProfile<ElectronicDeviceProfile>();
+                    cfg.AddProfile<GearProfile>();
+                    cfg.AddProfile<LengthHeaderProfile>();
+                    cfg.AddProfile<LengthSampleProfile>();
+                    cfg.AddProfile<PollutionDetailProfile>();
+                    cfg.AddProfile<PollutionEventProfile>();
+                    cfg.AddProfile<SafetyInspectionProfile>();
+                    cfg.AddProfile<SeaDayProfile>();
+                    cfg.AddProfile<SetCatchProfile>();
+                    cfg.AddProfile<SetProfile>();
+                    cfg.AddProfile<SightingProfile>();
+                    cfg.AddProfile<SpecialSpeciesInteractionProfile>();
+                    cfg.AddProfile<TransferProfile>();                   
+                    cfg.AddProfile<TripMonitorProfile>();
+                    cfg.AddProfile<TripProfile>();
+                    cfg.AddProfile<VesselAttributesProfile>();
+                    cfg.AddProfile<VesselNotesProfile>();
+                    cfg.AddProfile<WellContentProfile>();
+                    cfg.AddProfile<WellReconciliationProfile>();
+                    // Trim all strings implicitly
+                    Mapper.CreateMap<string, string>().ConvertUsing(s => s.NullSafeTrim());
+                }
+            );
+
+        }
+    }
+}

@@ -1,0 +1,67 @@
+﻿<Window x:Class="TripImporter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Trip Importer" Height="350" Width="525" Icon="logo.ico">
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo />
+    </Window.TaskbarItemInfo>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+            <Label Margin="0,0,10,0">Program:</Label>
+            <ComboBox Name="cmbProgramCode" Text="Program" VerticalAlignment="Center" SelectionChanged="OnProgramChange" SelectedValuePath="Tag">
+                <ComboBoxItem IsSelected="True" Tag="All">All</ComboBoxItem>
+                <ComboBoxItem Tag="AROB">AROB</ComboBoxItem>
+                <ComboBoxItem Tag="ASOB">ASOB</ComboBoxItem>
+                <ComboBoxItem Tag="AUOB">AUOB</ComboBoxItem>
+                <ComboBoxItem Tag="CKOB">CKOB</ComboBoxItem>
+                <ComboBoxItem Tag="FAOB">FAOB</ComboBoxItem>
+                <ComboBoxItem Tag="FJOB">FJOB</ComboBoxItem>
+                <ComboBoxItem Tag="FMOB">FMOB</ComboBoxItem>
+                <ComboBoxItem Tag="HWOB">HWOB</ComboBoxItem>
+                <ComboBoxItem Tag="KIOB">KIOB</ComboBoxItem>
+                <ComboBoxItem Tag="MHOB">MHOB</ComboBoxItem>
+                <ComboBoxItem Tag="NCOB">NCOB</ComboBoxItem>
+                <ComboBoxItem Tag="NROB">NROB</ComboBoxItem>
+                <ComboBoxItem Tag="NUOB">NUOB</ComboBoxItem>
+                <ComboBoxItem Tag="NZOB">NZOB</ComboBoxItem>
+                <ComboBoxItem Tag="PFOB">PFOB</ComboBoxItem>
+                <ComboBoxItem Tag="PGOB">PGOB</ComboBoxItem>
+                <ComboBoxItem Tag="PWOB">PWOB</ComboBoxItem>
+                <ComboBoxItem Tag="SBOB">SBOB</ComboBoxItem>
+                <ComboBoxItem Tag="SPOB">SPOB</ComboBoxItem>
+                <ComboBoxItem Tag="TOOB">TOOB</ComboBoxItem>
+                <ComboBoxItem Tag="TTOB">TTOB</ComboBoxItem>
+                <ComboBoxItem Tag="UNOB">UNOB</ComboBoxItem>
+                <ComboBoxItem Tag="VUOB">VUOB</ComboBoxItem>
+                <ComboBoxItem Tag="WFOB">WFOB</ComboBoxItem>
+                <ComboBoxItem Tag="WSOB">WSOB</ComboBoxItem>
+            </ComboBox>
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal">
+            <StackPanel.Resources>
+                <Style TargetType="{x:Type Button}">
+                    <Setter Property="Margin" Value="0,0,10,0" />
+                </Style>
+            </StackPanel.Resources>
+            <Button Name="btnStart" Click="btnStart_Click">Start</Button>
+            <Button Name="btnPause">Pause</Button>
+            <Button Name="btnContinue">Continue</Button>
+            <Button Name="btnStop">Stop</Button>
+            <ProgressBar Name="importProgress" Width="300" />
+        </StackPanel>
+        <DataGrid AutoGenerateColumns="False"
+                  Name="pendingTrips"
+                  AlternatingRowBackground="AliceBlue"
+                  HeadersVisibility="All"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Id}" Header="SourceId" /> 
+                <DataGridTextColumn Binding="{Binding TripNumber}" Header="Trip Number" />
+                <DataGridCheckBoxColumn Binding="{Binding ShouldCopy}" Header="Copy" />
+                <DataGridTextColumn Binding="{Binding IsSuccessful}" Header="Copy Status" />
+                <DataGridTextColumn Binding="{Binding ImportMessage}" Header="Import Message" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</Window>
