@@ -39,8 +39,12 @@ namespace ImportLibrary
                     cfg.AddProfile<VesselNotesProfile>();
                     cfg.AddProfile<WellContentProfile>();
                     cfg.AddProfile<WellReconciliationProfile>();
-                    // Trim all strings implicitly
-                    Mapper.CreateMap<string, string>().ConvertUsing(s => s.NullSafeTrim());
+                    // Trim all strings.  If the trimmed string is empty, return a null
+                    Mapper.CreateMap<string, string>().ConvertUsing(s =>
+                    {
+                        var str = s.NullSafeTrim();
+                        return "".Equals(str) ? null : str;
+                    });
                 }
             );
 

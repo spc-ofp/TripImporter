@@ -42,7 +42,7 @@ namespace ImportLibrary.Profiles
                 pevent.Trip = dest;
             }
 
-            // Remove any devices where they underlying MarineDevice is null
+            // Remove any devices where the underlying MarineDevice is null
             var electronics = dest.Electronics.ToList();
             electronics.RemoveAll(x => x.DeviceType == null);
             dest.Electronics.Clear();

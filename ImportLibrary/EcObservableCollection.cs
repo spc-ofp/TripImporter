@@ -49,7 +49,8 @@ namespace ImportLibrary
             EcObservableCollectionItemChangedEventArgs<T> args =
                 new EcObservableCollectionItemChangedEventArgs<T>();
             args.Item = (T)sender;
-            ItemChanged(this, args);
+            if (null != ItemChanged)
+                ItemChanged(this, args);
         }
 
         public event EcObservableCollectionItemChangedEventHandler ItemChanged;

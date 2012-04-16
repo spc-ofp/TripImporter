@@ -59,8 +59,8 @@
                 <DataGridTextColumn Binding="{Binding Id}" Header="SourceId" /> 
                 <DataGridTextColumn Binding="{Binding TripNumber}" Header="Trip Number" />
                 <DataGridCheckBoxColumn Binding="{Binding ShouldCopy}" Header="Copy" />
-                <DataGridTextColumn Binding="{Binding IsSuccessful}" Header="Copy Status" />
-                <DataGridTextColumn Binding="{Binding ImportMessage}" Header="Import Message" Width="*" />
+                <DataGridTextColumn Binding="{Binding IsSuccessful, Mode=OneWay}" Header="Copy Status" />
+                <DataGridTextColumn Binding="{Binding ImportMessage, Mode=OneWay}" Header="Import Message" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

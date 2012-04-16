@@ -85,7 +85,6 @@ namespace TripImporter
                     if (results.Item1)
                     {
                         // TODO Update status icon
-
                     }
                     item.ImportMessage = results.Item2;
                     itemsCompleted++;
@@ -121,9 +120,11 @@ namespace TripImporter
                 else
                 {
                     TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
+                    
                 }
                 
-                // TODO Re-enable btnStart when complete or cancelled
+                // TODO Re-enable btnStart when complete or cancelled (Still need to check that this is correct)
+                btnStart.IsEnabled = true;
                 
             };
 
