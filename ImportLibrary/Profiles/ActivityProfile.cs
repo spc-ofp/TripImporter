@@ -41,6 +41,23 @@ namespace ImportLibrary.Profiles
                 .ForMember(d => d.EezCode, o => o.MapFrom(s => s.EezId))
                 .AfterMap((s, d) =>
                 {
+                    // Somehow we're getting strange values from SQLite for these fields.  Tracking down the
+                    // real value is painful, so just set to zero for now.
+                    var importNotes = String.Empty;
+                    if (d.WindDirection.HasValue && (d.WindDirection.Value < 0 || d.WindDirection.Value > 360))
+                    {
+                        importNotes = String.Format("Changed WindDirection from {0} to 0;", d.WindDirection.Value);
+                        d.WindDirection = 0;
+                        
+                    }
+                    if (d.WindSpeed.HasValue && d.WindSpeed.Value < 0)
+                    {
+                        importNotes += String.Format(" Changed WindSpeed from {0} to 0;", d.WindSpeed.Value);
+                        d.WindSpeed = 0;
+                    }
+                    if (importNotes.Length > 0)
+                        d.DctNotes = importNotes.Trim();
+                    
                     // Only set the link when the activity is Fishing.  Otherwise, null out the child FishingSet
                     if (d.ActivityType.HasValue && TubsCommon.ActivityType.Fishing == d.ActivityType.Value)
                     {

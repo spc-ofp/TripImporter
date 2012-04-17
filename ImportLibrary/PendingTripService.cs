@@ -70,13 +70,17 @@ namespace ImportLibrary
       
             try
             {
-                // Map needs to happen within the scope of the session from the source database
                 dest = Mapper.Map<Observer.Entities.Trip, Tubs.Entities.Trip>(source);
                 Logger.Debug("Map operation completed");
             }
             catch (Exception ex)
             {
                 Logger.Error("Map operation failed with Exception", ex);
+                Logger.ErrorFormat("Source: {0}", ex.Source);
+                Logger.ErrorFormat("TargetSite: {0}", ex.TargetSite);
+                Logger.ErrorFormat("Stack Trace: {0}", ex.StackTrace);
+                Logger.ErrorFormat("Inner Exception: {0}", ex.InnerException);
+                Logger.ErrorFormat("Data: {0}", ex.Data);
                 return Tuple.Create(false, ex.Message ?? "Unknown mapping error");
             }
 
@@ -87,14 +91,15 @@ namespace ImportLibrary
             // Quick validation
             if (null == dest.Vessel || null == dest.DeparturePort || null == dest.ReturnPort || null == dest.Observer)
             {
-                Logger.DebugFormat(
+                string msg = String.Format(
                     "Has Vessel? {0}\nHas Departure Port? {1}\nHas Return Port {2}\nHas Observer {3}",
                     null != dest.Vessel,
                     null != dest.DeparturePort,
                     null != dest.ReturnPort,
-                    null != dest.Observer
+                    null != dest.Observer    
                 );
-                return Tuple.Create(false, "Missing Vessel, Port(s), and/or Observer");
+                Logger.Debug(msg);
+                return Tuple.Create(false, msg);
             }
 
             using (var session = Tubs.TubsDataService.GetSession())
@@ -153,6 +158,7 @@ namespace ImportLibrary
 
                 pendingTrips = (
                     from trip in query.ToList()
+                    where "S".Equals(trip.GearCode, StringComparison.InvariantCultureIgnoreCase) // Remove when LL support gets added
                     select new TripViewModel
                     {
                         Id = trip.Id,

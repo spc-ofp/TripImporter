@@ -108,7 +108,7 @@ namespace ImportLibrary.Tests
         {
             Mapper.AssertConfigurationIsValid();
             var _service = new PendingTripService();
-            var results = _service.CopyTrip(8879);
+            var results = _service.CopyTrip(4623);
             Assert.True(results.Item1, results.Item2);
         }
     }

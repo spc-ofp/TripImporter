@@ -56,7 +56,32 @@ namespace TripImporter
         private void btnStart_Click(object sender, RoutedEventArgs e)
         {
             btnStart.IsEnabled = false;
+            btnPause.IsEnabled = true;
+            btnStop.IsEnabled = true;
             CopySelectedTrips();
+        }
+
+        private void btnPause_Click(object sender, RoutedEventArgs e)
+        {
+            btnPause.IsEnabled = false;
+            btnContinue.IsEnabled = true;
+        }
+
+        private void btnContinue_Click(object sender, RoutedEventArgs e)
+        {
+            btnPause.IsEnabled = true;
+            btnContinue.IsEnabled = false;
+        }
+
+        private void btnStop_Click(object sender, RoutedEventArgs e)
+        {
+            btnStart.IsEnabled = true;
+            btnPause.IsEnabled = false;
+            btnStop.IsEnabled = false;
+            btnContinue.IsEnabled = false;
+            var worker = ((Button)sender).Tag as BackgroundWorker;
+            if (null != worker)
+                worker.CancelAsync();
         }
 
         private void CopySelectedTrips()
@@ -75,6 +100,12 @@ namespace TripImporter
             // Use a background worker that reports progress
             BackgroundWorker worker = new BackgroundWorker();
             worker.WorkerReportsProgress = true;
+            worker.WorkerSupportsCancellation = true;
+
+            // How do I wire up events for btnPause etc?
+            btnStop.Tag = worker;
+            btnStop.Click += new RoutedEventHandler(btnStop_Click);
+           
 
             worker.DoWork += delegate(object s, DoWorkEventArgs args)
             {
@@ -84,6 +115,7 @@ namespace TripImporter
                     var results = this._tripService.CopyTrip(item.Id);
                     if (results.Item1)
                     {
+                        item.ShouldCopy = false;
                         // TODO Update status icon
                     }
                     item.ImportMessage = results.Item2;
@@ -120,7 +152,7 @@ namespace TripImporter
                 else
                 {
                     TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
-                    
+                    importProgress.Value = 0;
                 }
                 
                 // TODO Re-enable btnStart when complete or cancelled (Still need to check that this is correct)
