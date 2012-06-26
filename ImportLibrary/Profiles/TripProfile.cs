@@ -74,7 +74,6 @@ namespace ImportLibrary.Profiles
             CreateMap<Observer.FieldStaff, Tubs.Observer>().ConvertUsing<ObserverTypeConverter>();
             CreateMap<Observer.Port, Tubs.Port>().ConvertUsing<PortTypeConverter>();
 
-
             CreateMap<Observer.Trip, Tubs.Trip>()
                 .Include<Observer.PurseSeineTrip, Tubs.PurseSeineTrip>()
                 // Standard ignores
@@ -82,7 +81,7 @@ namespace ImportLibrary.Profiles
                 .ForMember(d => d.DctScore, opt => opt.Ignore())
                 .ForMember(d => d.UpdatedBy, opt => opt.Ignore())
                 .ForMember(d => d.UpdatedDate, opt => opt.Ignore())
-                .ForMember(d => d.Vessel, opt => opt.Ignore())
+                .ForMember(d => d.Vessel, opt => opt.Ignore()) // Huh?
                 // Custom Ignores
                 .ForMember(d => d.Pushpins, o => o.Ignore())
                 .ForMember(d => d.CommunicationServices, o => o.Ignore())
@@ -93,18 +92,28 @@ namespace ImportLibrary.Profiles
                 .ForMember(d => d.PageCounts, o => o.Ignore())
                 .ForMember(d => d.IsSpillSampled, o => o.Ignore())
                 .ForMember(d => d.SpillTripNumber, o => o.Ignore())
+                .ForMember(d => d.Gen3Answers, o => o.Ignore()) // New setup in TUBS
+                .ForMember(d => d.Gen3Details, o => o.Ignore()) // New setup in TUBS
+                .ForMember(d => d.ObserverDepartureLatitude, o => o.Ignore()) // Not present in FoxPro
+                .ForMember(d => d.ObserverDepartureLongitude, o => o.Ignore()) // Not present in FoxPro
+                .ForMember(d => d.ObserverReturnLatitude, o => o.Ignore()) // Not present in FoxPro
+                .ForMember(d => d.ObserverReturnLongitude, o => o.Ignore()) // Not present in FoxPro
                 // Handled in AfterMap
                 .ForMember(d => d.DepartureDateOnly, o => o.Ignore())
                 .ForMember(d => d.DepartureTimeOnly, o => o.Ignore())
                 .ForMember(d => d.ReturnDateOnly, o => o.Ignore())
                 .ForMember(d => d.ReturnTimeOnly, o => o.Ignore())
                 .ForMember(d => d.UtcDepartureDate, o => o.Ignore())
+                .ForMember(d => d.HasWasteDisposal, o => o.Ignore())
+                .ForMember(d => d.WasteDisposalDescription, o => o.Ignore())
                 // Members to copy
                 .ForMember(d => d.ProgramCode, o => o.ResolveUsing<ProgramCodeResolver>().FromMember(s => s.ProgramId))
                 .ForMember(d => d.TripMonitor, o => o.MapFrom(s => s.Gen3))
                 .ForMember(d => d.Electronics, o => o.MapFrom(s => s.ElectronicDevices))
                 .ForMember(d => d.Version, o => o.ResolveUsing<FormVersionResolver>().FromMember(s => s.FormVersion))
                 .ForMember(d => d.VesselNotes, o => o.MapFrom(s => s))
+                .ForMember(d => d.VesselDepartureDate, o => o.MapFrom(s => s.VesselDepartureDate))
+
 
                 // It looks like parent/child relationships would be okay...
                 // except that AutoMapper freaks out when one end or the other is an abstract class.
@@ -122,7 +131,10 @@ namespace ImportLibrary.Profiles
                 {
                     PostMapFixup(d);
                     if (null != d.Gear) { d.Gear.Trip = d; }
-                    if (null != d.VesselAttributes) { d.VesselAttributes.Trip = d; }
+                    if (null != d.VesselAttributes) 
+                    { 
+                        d.VesselAttributes.Trip = d;
+                    }
                     foreach (var day in d.SeaDays)
                     {
                         day.Trip = d;
@@ -135,6 +147,13 @@ namespace ImportLibrary.Profiles
                     foreach (var wr in d.WellReconciliations)
                     {
                         wr.Trip = d;
+                    }
+
+                    // FoxPro stores waste disposal data in VesselAttributes object
+                    if (null != s.VesselAttributes)
+                    {
+                        d.HasWasteDisposal = s.VesselAttributes.HasWasteDisposal;
+                        d.WasteDisposalDescription = s.VesselAttributes.WasteDisposalDescription;
                     }
                     
                     // Fix Set numbers
@@ -152,13 +171,13 @@ namespace ImportLibrary.Profiles
                     // Only rework SetNumber if they're all zero
                     if (setNumbers.Sum() == 0)
                     {
-                        int setNumber = 0;
+                        int setNumber = 1;
                         foreach (var set in sets)
                         {
-                            set.SetNumber = ++setNumber;
+                            set.SetNumber = setNumber;
+                            setNumber++;
                         }
                     }
-
                     
                 })
                 ;

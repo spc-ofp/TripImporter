@@ -18,14 +18,15 @@ namespace ImportLibrary.Tests
     [TestFixture]
     public class CrewTest
     {
+        // There will always be a special place for the number 455
         [Test]
-        public void GetCrew()
+        public void GetCrew([Values(455)] int crewId)
         {
             Mapper.AssertConfigurationIsValid();
             using (var session = Observer.DataService.GetSession())
             {
                 var repo = new Repository<Observer.Entities.PsCrewMember>(session);
-                var source = repo.FindBy(455); // Always a special place for a 455
+                var source = repo.FindBy(crewId);
                 Assert.NotNull(source);
                 var destination = Mapper.Map<Observer.Entities.PsCrewMember, Tubs.Entities.PurseSeineCrew>(source);
                 Assert.NotNull(destination);

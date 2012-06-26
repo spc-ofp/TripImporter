@@ -18,8 +18,9 @@ namespace ImportLibrary.Tests
     [TestFixture]
     public class SightingTest
     {
+        // sightingId value by inspection
         [Test]
-        public void GetSighting()
+        public void GetSighting([Values(270)] int sightingId)
         {
             Mapper.AssertConfigurationIsValid();
 
@@ -28,7 +29,7 @@ namespace ImportLibrary.Tests
                 Assert.NotNull(session);
                 Assert.IsTrue(session.IsOpen);
                 var repo = new Repository<Observer.Entities.Sighting>(session);
-                var source = repo.FindBy(5);
+                var source = repo.FindBy(sightingId);
                 Assert.NotNull(source);
                 var destination = Mapper.Map<Observer.Entities.Sighting, Tubs.Entities.Sighting>(source);
                 Assert.NotNull(destination);

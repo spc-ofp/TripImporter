@@ -19,13 +19,13 @@ namespace ImportLibrary.Tests
     public class SpecialSpeciesInteractionTest
     {
         [Test]
-        public void GetInteraction()
+        public void GetInteraction([Values(3915)] int interactionId)
         {
             Mapper.AssertConfigurationIsValid();
             using (var session = Observer.DataService.GetSession())
             {
                 var repo = new Repository<Observer.Entities.SsInteraction>(session);
-                var src = repo.FindBy(3623);
+                var src = repo.FindBy(interactionId); // obstrip_id 15112
                 Assert.NotNull(src);
                 var dest = Mapper.Map<Observer.Entities.SsInteraction, Tubs.Entities.SpecialSpeciesInteraction>(src);
                 Assert.NotNull(dest);

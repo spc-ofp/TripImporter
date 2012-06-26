@@ -38,6 +38,10 @@ namespace ImportLibrary.Profiles
                 .ForMember(d => d.PercentageOfTuna, o => o.Ignore())
                 .ForMember(d => d.TonsOfTunaObserved2, o => o.Ignore())
                 .ForMember(d => d.LargeSpeciesPercentage, o => o.Ignore())
+                // Handled in AfterMap
+                .ForMember(d => d.ContainsLargeYellowfin, o => o.Ignore())
+                .ForMember(d => d.ContainsLargeBigeye, o => o.Ignore())
+
                 
                 // Combined Date/Time values plus time-only values
                 .ForMember(d => d.SkiffOff, o => o.MapFrom(s => s.DateOnly.Combine(s.TimeOnly)))
@@ -85,6 +89,12 @@ namespace ImportLibrary.Profiles
                     {
                         sh.Set = d;
                     }
+                    d.ContainsLargeBigeye =
+                        (s.LargeBigeyePercentage.HasValue && s.LargeBigeyePercentage.Value > 0) ||
+                        (s.LargeBigeyeCount.HasValue && s.LargeBigeyeCount.Value > 0);
+                    d.ContainsLargeYellowfin =
+                        (s.LargeYellowfinPercentage.HasValue && s.LargeYellowfinPercentage.Value > 0) ||
+                        (s.LargeYellowfinCount.HasValue && s.LargeYellowfinCount.Value > 0);
                 })
                 ;
         }

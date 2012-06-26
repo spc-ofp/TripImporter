@@ -18,14 +18,15 @@ namespace ImportLibrary.Tests
     [TestFixture]
     public class GearTest
     {
+        // gearId determined via inspection
         [Test]
-        public void GetGear()
+        public void GetGear([Values(2198)] int gearId)
         {
             Mapper.AssertConfigurationIsValid();
             using (var session = Observer.DataService.GetSession())
             {
                 var repo = new Repository<Observer.Entities.PsFishingGear>(session);
-                var source = repo.FindBy(2189); // obstrip_id 15736
+                var source = repo.FindBy(gearId); // obstrip_id 15736
                 Assert.NotNull(source);
                 var destination = Mapper.Map<Observer.Entities.PsFishingGear, Tubs.Entities.PurseSeineGear>(source);
                 Assert.NotNull(destination);

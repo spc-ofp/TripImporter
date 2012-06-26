@@ -18,14 +18,15 @@ namespace ImportLibrary.Tests
     [TestFixture]
     public class ElectronicDeviceTest
     {
+        // Id value determined by inspection
         [Test]
-        public void GetElectronicDevice()
+        public void GetElectronicDevice([Values(31820)] int electronicsId)
         {
             Mapper.AssertConfigurationIsValid();
             using (var session = Observer.DataService.GetSession())
             {
                 var repo = new Repository<Observer.Entities.Electronics>(session);
-                var source = repo.FindBy(31755); // From obstrip_id 7175
+                var source = repo.FindBy(electronicsId); // From obstrip_id 7175
                 Assert.NotNull(source);
                 var destination = Mapper.Map<Observer.Entities.Electronics, Tubs.Entities.ElectronicDevice>(source);
                 Assert.NotNull(destination);

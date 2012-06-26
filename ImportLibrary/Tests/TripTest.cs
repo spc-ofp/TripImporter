@@ -103,12 +103,12 @@ namespace ImportLibrary.Tests
         }
 
         [Test]
-        //[Ignore("Turned off while I work out other issues")]
+        [Ignore("Turned off while I work out other issues")]
         public void CopyTrip()
         {
             Mapper.AssertConfigurationIsValid();
             var _service = new PendingTripService();
-            var results = _service.CopyTrip(4623);
+            var results = _service.CopyTrip(3831);
             Assert.True(results.Item1, results.Item2);
         }
     }

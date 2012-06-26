@@ -16,17 +16,23 @@ namespace ImportLibrary.Converters
     /// </summary>
     public class PortTypeConverter : ITypeConverter<Observer.Port, Tubs.Entities.Port>
     {
+        public const string DefaultPortName = "UNKNOWN PORT";
+        public const string DefaultPortCode = "XYZZY";
+        
         public Tubs.Entities.Port Convert(ResolutionContext context)
         {
             var sourcePort = context.SourceValue as Observer.Port;
-            if (null == sourcePort)
-                return null;
+            // Default to an unknown port
+            var portName = null == sourcePort ? DefaultPortName : sourcePort.Name.ToUpper().Trim();
 
             Tubs.Entities.Port port = null;
             using (var repo = new Tubs.TubsRepository<Tubs.Entities.Port>(Tubs.TubsDataService.GetSession()))
             {
-                var portName = sourcePort.Name.ToUpper().Trim();
                 port = repo.FilterBy(p => p.Name == portName).FirstOrDefault();
+                if (null == port)
+                {
+                    port = repo.FindBy(DefaultPortCode);
+                }
             }
             return port;
         }

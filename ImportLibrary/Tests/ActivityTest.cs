@@ -19,8 +19,9 @@ namespace ImportLibrary.Tests
     [TestFixture]
     public class ActivityTest
     {
+        // activityId value by inspection
         [Test]
-        public void GetActivity()
+        public void GetActivity([Values(623024)] int activityId)
         {
             Mapper.AssertConfigurationIsValid();
             Console.WriteLine("Valid configuration...");
@@ -31,7 +32,7 @@ namespace ImportLibrary.Tests
                 Console.WriteLine("Session is open");
                 var repo = new Repository<Observer.Entities.PsDailyEvent>(session);
                 Console.WriteLine("Created PsDailyEvent repository");
-                var source = repo.FindBy(623024); // From obstrip_id 11746
+                var source = repo.FindBy(activityId); // From obstrip_id 11746
                 Console.WriteLine("Checking if returned entity is null");
                 Assert.NotNull(source);
                 Console.WriteLine("Source entity not null, mapping with AutoMapper");

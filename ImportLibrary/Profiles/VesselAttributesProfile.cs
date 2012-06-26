@@ -32,6 +32,9 @@ namespace ImportLibrary.Profiles
                 // Specific ignores
                 .ForMember(destination => destination.AuxiliaryBoatCount, opt => opt.Ignore())
                 .ForMember(destination => destination.LightCount, opt => opt.Ignore())
+                .ForMember(d => d.VesselLength, o => o.Ignore())
+                .ForMember(d => d.VesselLengthUnits, o => o.Ignore())
+                .ForMember(d => d.VesselTonnage, o => o.Ignore())
                 // Mapping for fields with different names
                 .ForMember(d => d.HasTenderBoats, o => o.MapFrom(s => s.Tenderboats))
                 .ForMember(d => d.SkiffMake, o => o.MapFrom(s => s.SkiffEngineMake))
