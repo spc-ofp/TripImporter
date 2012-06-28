@@ -31,6 +31,10 @@ namespace ImportLibrary.Tests
                 Assert.NotNull(src);
                 var dest = Mapper.Map<Observer.Entities.LonglineFishingSet, Tubs.Entities.LongLineSet>(src);
                 Assert.NotNull(dest);
+                Assert.NotNull(dest.NotesList);
+                Assert.NotNull(dest.Baskets);
+                Assert.NotNull(dest.EventList);
+                Assert.True(dest.EventList.Count > 1);
                 if (dest.LineSettingSpeedUnit.HasValue)
                 {
                     Assert.True(Tubs.Common.UnitOfMeasure.Knots.Equals(dest.LineSettingSpeedUnit.Value));
@@ -44,6 +48,7 @@ namespace ImportLibrary.Tests
                 Assert.True(dest.TotalBasketCount.HasValue);
                 Assert.AreEqual(61, dest.TotalBasketCount);
                 Assert.True(dest.IsTargetingTuna.HasValue && dest.IsTargetingTuna.Value);
+                
             }
         }
     }
