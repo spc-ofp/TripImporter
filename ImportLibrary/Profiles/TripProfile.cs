@@ -76,6 +76,7 @@ namespace ImportLibrary.Profiles
 
             CreateMap<Observer.Trip, Tubs.Trip>()
                 .Include<Observer.PurseSeineTrip, Tubs.PurseSeineTrip>()
+                .Include<Observer.LongLineTrip, Tubs.LongLineTrip>()
                 // Standard ignores
                 .ForMember(d => d.DctNotes, opt => opt.Ignore())
                 .ForMember(d => d.DctScore, opt => opt.Ignore())
@@ -98,6 +99,7 @@ namespace ImportLibrary.Profiles
                 .ForMember(d => d.ObserverDepartureLongitude, o => o.Ignore()) // Not present in FoxPro
                 .ForMember(d => d.ObserverReturnLatitude, o => o.Ignore()) // Not present in FoxPro
                 .ForMember(d => d.ObserverReturnLongitude, o => o.Ignore()) // Not present in FoxPro
+                .ForMember(d => d.CrewCount, o => o.Ignore()) // Not present as a single field in FoxPro
                 // Handled in AfterMap
                 .ForMember(d => d.DepartureDateOnly, o => o.Ignore())
                 .ForMember(d => d.DepartureTimeOnly, o => o.Ignore())
@@ -121,6 +123,10 @@ namespace ImportLibrary.Profiles
                 {
                     PostMapFixup(d);
                 })
+                ;
+
+            CreateMap<Observer.LongLineTrip, Tubs.LongLineTrip>()
+                .ForMember(d => d.Gear, o => o.MapFrom(s => s.FishingGear))
                 ;
             
             CreateMap<Observer.PurseSeineTrip, Tubs.PurseSeineTrip>()

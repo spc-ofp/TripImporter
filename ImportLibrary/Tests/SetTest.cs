@@ -19,16 +19,24 @@ namespace ImportLibrary.Tests
     public class SetTest
     {
         [Test]
-        public void GetSet()
+        public void GetSet([Values(1116394)] int setId)
         {
             Mapper.AssertConfigurationIsValid();
             using (var session = Observer.DataService.GetSession())
             {
                 var repo = new Repository<Observer.Entities.PsFishingSet>(session);
-                var src = repo.FindBy(12345);
+                var src = repo.FindBy(setId);
                 Assert.NotNull(src);
                 var dest = Mapper.Map<Observer.Entities.PsFishingSet, Tubs.Entities.PurseSeineSet>(src);
                 Assert.NotNull(dest);
+                Assert.NotNull(dest.SamplingHeaders);
+                Assert.True(dest.SamplingHeaders.Count > 1);
+                foreach (var header in dest.SamplingHeaders)
+                {
+                    Assert.NotNull(header);
+                    StringAssert.AreEqualIgnoringCase("alberts", header.EnteredBy);
+                    StringAssert.AreEqualIgnoringCase("T", header.MeasuringInstrument);
+                }
             }
         }
     }

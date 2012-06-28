@@ -8,6 +8,7 @@ namespace ImportLibrary.Profiles
 {
     using AutoMapper;
     using ImportLibrary.ExtensionMethods;
+    using ImportLibrary.Resolvers;
     using Observer = Spc.Ofp.Legacy.Observer.Entities;
     using Tubs = Spc.Ofp.Tubs.DAL.Entities;
 
@@ -18,6 +19,48 @@ namespace ImportLibrary.Profiles
     {
         protected override void Configure()
         {
+            CreateMap<Observer.LonglineFishingSet, Tubs.LongLineSet>()
+                // Standard ignores
+                .ForMember(destination => destination.DctNotes, opt => opt.Ignore())
+                .ForMember(destination => destination.DctScore, opt => opt.Ignore())
+                .ForMember(destination => destination.UpdatedBy, opt => opt.Ignore())
+                .ForMember(destination => destination.UpdatedDate, opt => opt.Ignore())
+                .ForMember(d => d.Id, o => o.Ignore())
+                .ForMember(d => d.Trip, o => o.Ignore())
+                // Custom ignores                
+                .ForMember(d => d.SetDateOnly, o => o.Ignore()) // Handled in AfterMap
+                .ForMember(d => d.SetTimeOnly, o => o.Ignore()) // Handled in AfterMap
+                .ForMember(d => d.UtcSetDateOnly, o => o.Ignore()) // Handled in AfterMap
+                .ForMember(d => d.UtcSetTimeOnly, o => o.Ignore()) // Handled in AfterMap
+                .ForMember(d => d.IsTargetingSharks, o => o.Ignore()) // Handled in AfterMap
+                .ForMember(d => d.IsTargetingTuna, o => o.Ignore()) // Handled in AfterMap
+                .ForMember(d => d.IsTargetingSwordfish, o => o.Ignore()) // Handled in AfterMap
+                .ForMember(d => d.BaitSpecies5Hooks, o => o.Ignore())
+                .ForMember(d => d.NotesList, o => o.Ignore())
+                .ForMember(d => d.Baskets, o => o.Ignore())
+                .ForMember(d => d.DiaryPage, o => o.Ignore())
+                .ForMember(d => d.TdrLength, o => o.Ignore())
+                .ForMember(d => d.LineSettingSpeedMetersPerSecond, o => o.Ignore())
+                .ForMember(d => d.Gen3Events, o => o.Ignore())
+                .ForMember(d => d.WasObserved, o => o.Ignore())
+                // Custom mapping
+                .ForMember(d => d.SetDate, o => o.MapFrom(s => s.GetDate()))
+                .ForMember(d => d.UtcSetDate, o => o.MapFrom(s => s.GetUtcDate()))
+                .ForMember(d => d.SetId, o => o.MapFrom(s => s.SetNumber))
+                .ForMember(d => d.Details, o => o.MapFrom(s => s.SetDetails))
+                .ForMember(d => d.LineSettingSpeedUnit, o => o.ResolveUsing<LineSettingSpeedResolver>().FromMember(s => s.LineSettingSpeedUnit))
+                .AfterMap((s, d) =>
+                {
+                    d.SetDateOnly = d.SetDate.AtMidnight();
+                    d.SetTimeOnly = d.SetDate.TimeOnly();
+                    d.UtcSetDateOnly = d.UtcSetDate.AtMidnight();
+                    d.UtcSetTimeOnly = d.UtcSetDate.TimeOnly();
+                    d.IsTargetingTuna = s.TargetSpeciesId.HasValue && 1 == s.TargetSpeciesId.Value;
+                    d.IsTargetingSwordfish = s.TargetSpeciesId.HasValue && 2 == s.TargetSpeciesId.Value;
+                    d.IsTargetingSharks = s.TargetSpeciesId.HasValue && 3 == s.TargetSpeciesId.Value;
+                })
+                ;
+            
             CreateMap<Observer.PsFishingSet, Tubs.PurseSeineSet>()
                 // Standard ignores
                 .ForMember(destination => destination.DctNotes, opt => opt.Ignore())

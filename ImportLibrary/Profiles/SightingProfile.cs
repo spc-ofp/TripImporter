@@ -8,6 +8,7 @@ namespace ImportLibrary.Profiles
 {
     using System;
     using AutoMapper;
+    using ImportLibrary.ExtensionMethods;
     using ImportLibrary.Resolvers;
     using Observer = Spc.Ofp.Legacy.Observer.Entities;
     using Tubs = Spc.Ofp.Tubs.DAL.Entities;
@@ -31,7 +32,9 @@ namespace ImportLibrary.Profiles
                 .ForMember(destination => destination.Id, opt => opt.Ignore())
                 .ForMember(d => d.Vessel, o => o.Ignore())
                 .ForMember(d => d.Trip, o => o.Ignore())
-
+                // Handled in AfterMap
+                .ForMember(d => d.EventDateOnly, o => o.Ignore())
+                .ForMember(d => d.EventTimeOnly, o => o.Ignore())
                 .ForMember(destination => destination.Ircs,
                            options => options.MapFrom(source => source.CallSign))
                 .ForMember(destination => destination.VesselName,
@@ -40,10 +43,15 @@ namespace ImportLibrary.Profiles
                            options => options.MapFrom(source => source.FlagCode))
                 .ForMember(destination => destination.EezCode,
                            options => options.MapFrom(source => source.EezId))
-                .ForMember(destination => destination.EventTime,
+                .ForMember(destination => destination.EventDate,
                            options => options.MapFrom(source => source.GetDate()))
                 .ForMember(d => d.ActionType, o => o.ResolveUsing<ActionTypeResolver>().FromMember(s => s.ActivityType))
                 .ForMember(d => d.VesselType, o => o.ResolveUsing<SightedVesselResolver>().FromMember(s => s.VesselType))
+                .AfterMap((s, d) =>
+                {
+                    d.EventDateOnly = d.EventDate.AtMidnight();
+                    d.EventTimeOnly = d.EventDate.TimeOnly();
+                })
                 ;
         }
     }

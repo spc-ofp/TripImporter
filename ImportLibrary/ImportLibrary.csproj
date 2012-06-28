@@ -70,6 +70,7 @@
   <ItemGroup>
     <Compile Include="AutoMapperConfiguration.cs" />
     <Compile Include="Converters\MarineDeviceTypeConverter.cs" />
+    <Compile Include="Converters\NullableIntToNullableDecimal.cs" />
     <Compile Include="Converters\ObserverTypeConverter.cs" />
     <Compile Include="Converters\PortTypeConverter.cs" />
     <Compile Include="Converters\VesselTypeConverter.cs" />
@@ -77,6 +78,7 @@
     <Compile Include="EcObservableCollection.cs" />
     <Compile Include="PendingTripService.cs" />
     <Compile Include="Profiles\ActivityProfile.cs" />
+    <Compile Include="Profiles\ConversionFactorProfile.cs" />
     <Compile Include="Profiles\CrewProfile.cs" />
     <Compile Include="Profiles\ElectronicDeviceProfile.cs" />
     <Compile Include="Profiles\GearProfile.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="Profiles\SafetyInspectionProfile.cs" />
     <Compile Include="Profiles\SeaDayProfile.cs" />
     <Compile Include="Profiles\SetCatchProfile.cs" />
+    <Compile Include="Profiles\SetHaulProfile.cs" />
     <Compile Include="Profiles\SightingProfile.cs" />
     <Compile Include="Profiles\SpecialSpeciesInteractionProfile.cs" />
     <Compile Include="Profiles\TransferProfile.cs" />
@@ -111,6 +114,7 @@
     <Compile Include="Resolvers\LengthUnitResolver.cs" />
     <Compile Include="Resolvers\LifejacketAvailabilityResolver.cs" />
     <Compile Include="Resolvers\LifeJacketProvidedResolver.cs" />
+    <Compile Include="Resolvers\LineSettingSpeedResolver.cs" />
     <Compile Include="Resolvers\PollutionMaterialResolver.cs" />
     <Compile Include="Resolvers\PollutionTypeResolver.cs" />
     <Compile Include="Resolvers\ProgramCodeResolver.cs" />
@@ -128,6 +132,7 @@
     <Compile Include="Resolvers\YesNoResolver.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Tests\ActivityTest.cs" />
+    <Compile Include="Tests\ConversionFactorTest.cs" />
     <Compile Include="Tests\CrewTest.cs" />
     <Compile Include="Tests\ElectronicDeviceTest.cs" />
     <Compile Include="Tests\GearTest.cs" />
@@ -138,6 +143,7 @@
     <Compile Include="Tests\SafetyInspectionTest.cs" />
     <Compile Include="Tests\SeaDayTest.cs" />
     <Compile Include="Tests\SetCatchTest.cs" />
+    <Compile Include="Tests\SetHaulTest.cs" />
     <Compile Include="Tests\SetTest.cs" />
     <Compile Include="Tests\SightingTest.cs" />
     <Compile Include="Tests\SpecialSpeciesInteractionTest.cs" />

@@ -18,6 +18,27 @@ namespace ImportLibrary.Profiles
     {
         protected override void Configure()
         {
+            CreateMap<Observer.LonglineCatch, Tubs.LongLineCatch>()
+                .ForMember(d => d.EnteredBy, o => o.UseValue("TubsTripProcessor"))
+                .ForMember(d => d.EnteredDate, o => o.UseValue(DateTime.Now))
+                // Standard ignores
+                .ForMember(destination => destination.DctNotes, opt => opt.Ignore())
+                .ForMember(destination => destination.DctScore, opt => opt.Ignore())
+                .ForMember(destination => destination.UpdatedBy, opt => opt.Ignore())
+                .ForMember(destination => destination.UpdatedDate, opt => opt.Ignore())
+                .ForMember(d => d.Id, o => o.Ignore())
+                .ForMember(d => d.FishingSet, o => o.Ignore())
+                // Custom ignores
+                .ForMember(d => d.Spare1, o => o.Ignore())
+                // Custom mapping               
+                .ForMember(d => d.LandedConditionCode, o => o.MapFrom(s => s.ConditionCode))
+                .AfterMap((s, d) =>
+                {
+
+                })
+                ;
+            
+            
             CreateMap<Observer.PsSetCatch, Tubs.PurseSeineSetCatch>()
                 .ForMember(d => d.EnteredBy, o => o.UseValue("TubsTripProcessor"))
                 .ForMember(d => d.EnteredDate, o => o.UseValue(DateTime.Now))

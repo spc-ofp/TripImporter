@@ -7,6 +7,7 @@
 namespace ImportLibrary
 {
     using AutoMapper;
+    using ImportLibrary.Converters;
     using ImportLibrary.Profiles;
 
     /// <summary>
@@ -29,6 +30,8 @@ namespace ImportLibrary
                     cfg.AddProfile<SafetyInspectionProfile>();
                     cfg.AddProfile<SeaDayProfile>();
                     cfg.AddProfile<SetCatchProfile>();
+                    cfg.AddProfile<SetHaulProfile>();
+                    cfg.AddProfile<ConversionFactorProfile>();
                     cfg.AddProfile<SetProfile>();
                     cfg.AddProfile<SightingProfile>();
                     cfg.AddProfile<SpecialSpeciesInteractionProfile>();
@@ -45,6 +48,8 @@ namespace ImportLibrary
                         var str = s.NullSafeTrim();
                         return "".Equals(str) ? null : str;
                     });
+                    // Longline gear has two attributes that switched from int in FoxPro to decimal in TUBS
+                    Mapper.CreateMap<int?, decimal?>().ConvertUsing<NullableIntToNullableDecimal>();
                 }
             );
 
