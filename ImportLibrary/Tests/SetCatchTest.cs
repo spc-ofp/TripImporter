@@ -31,5 +31,27 @@ namespace ImportLibrary.Tests
                 Assert.NotNull(dest);
             }
         }
+
+        // catchId values determined by inspection
+        // These are all female DOL that came on board in A1 condition and were caught Christmas day 2011
+        [Test]
+        public void GetLongLineCatch([Values(2515256, 2515246, 2515266, 2515258)] int catchId)
+        {
+            Mapper.AssertConfigurationIsValid();
+            using (var session = Observer.DataService.GetSession())
+            {
+                var repo = new Repository<Observer.Entities.LonglineCatch>(session);
+                var src = repo.FindBy(catchId);
+                Assert.NotNull(src);
+                var dest = Mapper.Map<Observer.Entities.LonglineCatch, Tubs.Entities.LongLineCatch>(src);
+                Assert.NotNull(dest);
+                Assert.IsNotNullOrEmpty(dest.SpeciesCode);
+                Assert.AreEqual(Tubs.Common.ConditionCode.A1, dest.LandedConditionCode);
+                Assert.AreEqual(Tubs.Common.SexCode.F, dest.SexCode);
+                var xmas = new System.DateTime(2011, 12, 25);
+                Assert.AreEqual(xmas, dest.DateOnly);
+                Assert.IsNotNullOrEmpty(dest.TimeOnly);
+            }
+        }
     }
 }

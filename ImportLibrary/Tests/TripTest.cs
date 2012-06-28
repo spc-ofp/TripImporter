@@ -21,14 +21,48 @@ namespace ImportLibrary.Tests
     public class TripTest
     {
         [Test]
-        public void GetTrip()
+        public void GetLongLineTrip([Values(15850)] int tripId)
         {
             Mapper.AssertConfigurationIsValid();
             using (var session = Observer.DataService.GetSession())
             {
                 var repo = new Repository<Observer.Entities.Trip>(session);
-                var source = repo.FindBy(11746);
+                var source = repo.FindBy(tripId);
                 Assert.NotNull(source);
+                Assert.IsInstanceOf<Observer.Entities.LongLineTrip>(source);
+                var destination = Mapper.Map<Observer.Entities.Trip, Tubs.Entities.Trip>(source) as Tubs.Entities.LongLineTrip;
+                Assert.NotNull(destination);
+                Assert.NotNull(destination.Gear);
+                Assert.NotNull(destination.Electronics);
+                Assert.AreEqual(30, destination.Electronics.Count);
+                // select count(*) from l_sethaul where obstrip_id = 15850
+                // 9 entities
+                Assert.NotNull(destination.FishingSets);
+                Assert.AreEqual(9, destination.FishingSets.Count);
+
+                var events =
+                    from fset in destination.FishingSets
+                    select fset.EventList.Count;
+                Assert.AreEqual(96, events.Sum());
+
+                var setcatch =
+                    from fset in destination.FishingSets
+                    select fset.CatchList.Count;
+                Assert.AreEqual(900, setcatch.Sum());
+            }
+        }
+        
+        
+        [Test]
+        public void GetPurseSeineTrip([Values(11746)] int tripId)
+        {
+            Mapper.AssertConfigurationIsValid();
+            using (var session = Observer.DataService.GetSession())
+            {
+                var repo = new Repository<Observer.Entities.Trip>(session);
+                var source = repo.FindBy(tripId);
+                Assert.NotNull(source);
+                Assert.IsInstanceOf<Observer.Entities.PurseSeineTrip>(source);
                 var destination = Mapper.Map<Observer.Entities.Trip, Tubs.Entities.Trip>(source) as Tubs.Entities.PurseSeineTrip;
                 Assert.NotNull(destination);
                 // TODO Pick some fields to check
@@ -90,13 +124,14 @@ namespace ImportLibrary.Tests
         }
 
         [Test]
-        public void GetKiobTrip()
+        public void GetKiobTrip([Values(3900)] int tripId)
         {
             using (var session = Observer.DataService.GetSession())
             {
                 var repo = new Repository<Observer.Entities.Trip>(session);
-                var source = repo.FindBy(3900);
+                var source = repo.FindBy(tripId);
                 Assert.NotNull(source);
+                Assert.IsInstanceOf<Observer.Entities.PurseSeineTrip>(source);
                 var destination = Mapper.Map<Observer.Entities.Trip, Tubs.Entities.Trip>(source) as Tubs.Entities.PurseSeineTrip;
                 Assert.NotNull(destination);
             }
@@ -104,11 +139,20 @@ namespace ImportLibrary.Tests
 
         [Test]
         [Ignore("Turned off while I work out other issues")]
-        public void CopyTrip()
+        public void CopyPurseSeineTrip([Values(3831)] int tripId)
         {
             Mapper.AssertConfigurationIsValid();
             var _service = new PendingTripService();
-            var results = _service.CopyTrip(3831);
+            var results = _service.CopyTrip(tripId);
+            Assert.True(results.Item1, results.Item2);
+        }
+
+        [Test]
+        public void CopyLongLineTrip([Values(15712)] int tripId)
+        {
+            Mapper.AssertConfigurationIsValid();
+            var _service = new PendingTripService();
+            var results = _service.CopyTrip(tripId);
             Assert.True(results.Item1, results.Item2);
         }
     }

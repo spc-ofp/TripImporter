@@ -115,8 +115,6 @@ namespace ImportLibrary.Profiles
                 .ForMember(d => d.Version, o => o.ResolveUsing<FormVersionResolver>().FromMember(s => s.FormVersion))
                 .ForMember(d => d.VesselNotes, o => o.MapFrom(s => s))
                 .ForMember(d => d.VesselDepartureDate, o => o.MapFrom(s => s.VesselDepartureDate))
-
-
                 // It looks like parent/child relationships would be okay...
                 // except that AutoMapper freaks out when one end or the other is an abstract class.
                 .AfterMap((s, d) =>
@@ -127,6 +125,15 @@ namespace ImportLibrary.Profiles
 
             CreateMap<Observer.LongLineTrip, Tubs.LongLineTrip>()
                 .ForMember(d => d.Gear, o => o.MapFrom(s => s.FishingGear))
+                .AfterMap((s,d) =>
+                {
+                    PostMapFixup(d);
+                    if (null != d.Gear) { d.Gear.Trip = d; }
+                    foreach (var fset in d.FishingSets)
+                    {
+                        fset.Trip = d;
+                    }
+                })
                 ;
             
             CreateMap<Observer.PurseSeineTrip, Tubs.PurseSeineTrip>()

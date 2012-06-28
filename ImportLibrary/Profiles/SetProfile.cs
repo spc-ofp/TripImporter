@@ -58,6 +58,29 @@ namespace ImportLibrary.Profiles
                     d.IsTargetingTuna = s.TargetSpeciesId.HasValue && 1 == s.TargetSpeciesId.Value;
                     d.IsTargetingSwordfish = s.TargetSpeciesId.HasValue && 2 == s.TargetSpeciesId.Value;
                     d.IsTargetingSharks = s.TargetSpeciesId.HasValue && 3 == s.TargetSpeciesId.Value;
+
+                    // Reinstate relationships
+                    foreach (var sc in d.CatchList)
+                    {
+                        if (null == sc)
+                            continue;
+
+                        sc.FishingSet = d;
+                    }
+                    foreach (var evt in d.EventList)
+                    {
+                        if (null == evt)
+                            continue;
+
+                        evt.FishingSet = d;
+                    }
+                    foreach (var cfactor in d.ConversionFactors)
+                    {
+                        if (null == cfactor)
+                            continue;
+
+                        cfactor.FishingSet = d;
+                    }
                 })
                 ;
             
@@ -126,10 +149,16 @@ namespace ImportLibrary.Profiles
                 {
                     foreach (var sc in d.CatchList)
                     {
+                        if (null == sc)
+                            continue;
+
                         sc.FishingSet = d;
                     }
                     foreach (var sh in d.SamplingHeaders)
                     {
+                        if (null == sh)
+                            continue;
+
                         sh.Set = d;
                     }
                     d.ContainsLargeBigeye =

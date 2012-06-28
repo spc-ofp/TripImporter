@@ -64,10 +64,11 @@ namespace ImportLibrary
                 return Tuple.Create(false, String.Format("Trip with Id {0} not found in source system", sourceId));
              
             // Temporary check
-            Logger.DebugFormat("Trip type: {0}", source.GetType());
-            if (typeof(Observer.Entities.PurseSeineTrip) != source.GetType())
-                return Tuple.Create(false, String.Format("Trip of type {0} not yet supported", source.GetType()));
-      
+            var tripType = source.GetType();
+            Logger.DebugFormat("Trip type: {0}", tripType);
+            if (!(typeof(Observer.Entities.LongLineTrip) == tripType) || (typeof(Observer.Entities.PurseSeineTrip) == tripType))
+                return Tuple.Create(false, String.Format("Trip of type {0} not yet supported", tripType));
+
             try
             {
                 dest = Mapper.Map<Observer.Entities.Trip, Tubs.Entities.Trip>(source);
