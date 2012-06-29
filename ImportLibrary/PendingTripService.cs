@@ -159,7 +159,7 @@ namespace ImportLibrary
 
                 pendingTrips = (
                     from trip in query.ToList()
-                    where "S".Equals(trip.GearCode, StringComparison.InvariantCultureIgnoreCase) // Remove when LL support gets added
+                    //where "S".Equals(trip.GearCode, StringComparison.InvariantCultureIgnoreCase) // Remove when LL support gets added
                     select new TripViewModel
                     {
                         Id = trip.Id,

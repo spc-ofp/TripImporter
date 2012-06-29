@@ -6,11 +6,14 @@
 
 namespace ImportLibrary.Profiles
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
     using AutoMapper;
     using ImportLibrary.ExtensionMethods;
     using ImportLibrary.Resolvers;
     using Observer = Spc.Ofp.Legacy.Observer.Entities;
-    using Tubs = Spc.Ofp.Tubs.DAL.Entities;
+    using Tubs = Spc.Ofp.Tubs.DAL;
 
     /// <summary>
     /// TODO: Update summary.
@@ -19,7 +22,7 @@ namespace ImportLibrary.Profiles
     {
         protected override void Configure()
         {
-            CreateMap<Observer.LonglineFishingSet, Tubs.LongLineSet>()
+            CreateMap<Observer.LonglineFishingSet, Tubs.Entities.LongLineSet>()
                 // Standard ignores
                 .ForMember(destination => destination.DctNotes, opt => opt.Ignore())
                 .ForMember(destination => destination.DctScore, opt => opt.Ignore())
@@ -40,7 +43,7 @@ namespace ImportLibrary.Profiles
                 .ForMember(d => d.Baskets, o => o.Ignore())
                 .ForMember(d => d.DiaryPage, o => o.Ignore())
                 .ForMember(d => d.TdrLength, o => o.Ignore())
-                .ForMember(d => d.LineSettingSpeedMetersPerSecond, o => o.Ignore())
+                .ForMember(d => d.LineSettingSpeedMetersPerSecond, o => o.Ignore()) // Handled in AfterMap
                 .ForMember(d => d.Gen3Events, o => o.Ignore())
                 .ForMember(d => d.WasObserved, o => o.Ignore())
                 // Custom mapping
@@ -51,13 +54,26 @@ namespace ImportLibrary.Profiles
                 .ForMember(d => d.LineSettingSpeedUnit, o => o.ResolveUsing<LineSettingSpeedResolver>().FromMember(s => s.LineSettingSpeedUnit))
                 .AfterMap((s, d) =>
                 {
+                    // Fix date/time splits
                     d.SetDateOnly = d.SetDate.AtMidnight();
                     d.SetTimeOnly = d.SetDate.TimeOnly();
                     d.UtcSetDateOnly = d.UtcSetDate.AtMidnight();
                     d.UtcSetTimeOnly = d.UtcSetDate.TimeOnly();
+
+                    // Turn single integer into 1 of 3 booleans
                     d.IsTargetingTuna = s.TargetSpeciesId.HasValue && 1 == s.TargetSpeciesId.Value;
                     d.IsTargetingSwordfish = s.TargetSpeciesId.HasValue && 2 == s.TargetSpeciesId.Value;
                     d.IsTargetingSharks = s.TargetSpeciesId.HasValue && 3 == s.TargetSpeciesId.Value;
+
+                    // Fix LineSettingSpeedMetersPerSecond
+                    if (d.LineSettingSpeed.HasValue &&  Tubs.Common.UnitOfMeasure.MetersPerSecond.Equals(d.LineSettingSpeedUnit))
+                    {
+                        d.LineSettingSpeedMetersPerSecond = d.LineSettingSpeed.Value;
+                    }
+                    else if (d.LineSettingSpeed.HasValue && Tubs.Common.UnitOfMeasure.Knots.Equals(d.LineSettingSpeedUnit))
+                    {
+                        d.LineSettingSpeedMetersPerSecond = Tubs.Common.MetricConversions.KnotsToMetersPerSecond(d.LineSettingSpeed.Value);
+                    }
 
                     // Reinstate relationships
                     foreach (var sc in d.CatchList)
@@ -81,10 +97,13 @@ namespace ImportLibrary.Profiles
 
                         cfactor.FishingSet = d;
                     }
+
+                    // Fill in start/end of set and start/end of haul
+                    Tubs.Entities.LongLineSetHaulEvent.SetStartAndEnd(d.EventList);
                 })
                 ;
             
-            CreateMap<Observer.PsFishingSet, Tubs.PurseSeineSet>()
+            CreateMap<Observer.PsFishingSet, Tubs.Entities.PurseSeineSet>()
                 // Standard ignores
                 .ForMember(destination => destination.DctNotes, opt => opt.Ignore())
                 .ForMember(destination => destination.DctScore, opt => opt.Ignore())

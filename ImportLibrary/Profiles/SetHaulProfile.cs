@@ -32,13 +32,18 @@ namespace ImportLibrary.Profiles
                 // Custom ignores
                 .ForMember(d => d.LogDateOnly, o => o.Ignore()) // Handled in AfterMap
                 .ForMember(d => d.LogTimeOnly, o => o.Ignore()) // Handled in AfterMap
+                .ForMember(d => d.ActivityType, o => o.Ignore()) // Handled in parent
                 // Custom mappings
                 .ForMember(d => d.LogDate, o => o.MapFrom(s => s.GetDate()))
                 .ForMember(d => d.CloudCover, o => o.MapFrom(s => s.CloudCoverage))
                 .ForMember(d => d.EezCode, o => o.MapFrom(s => s.EezId))
                 .ForMember(d => d.SeaCode, o => o.MapFrom(s => s.SeaCondition))
                 .ForMember(d => d.Sethaul, o => o.MapFrom(s => s.EventType))
-                .ForMember(d => d.StartEndId, o => o.MapFrom(s => s.EventNumber))
+                .AfterMap((s, d) =>
+                {
+                    d.LogDateOnly = d.LogDate.AtMidnight();
+                    d.LogTimeOnly = d.LogDate.TimeOnly();
+                })
                 ;
         }
     }

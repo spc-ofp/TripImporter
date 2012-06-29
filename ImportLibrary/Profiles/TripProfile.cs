@@ -133,6 +133,24 @@ namespace ImportLibrary.Profiles
                     {
                         fset.Trip = d;
                     }
+
+                    // Fix Set numbers
+                    var sets = d.FishingSets.Where(fs => null != fs && fs.SetDate.HasValue).OrderBy(fs => fs.SetDate);
+
+                    var setNumbers =
+                        from set in sets
+                        select set.SetNumber;
+
+                    // Only rework SetNumber if they're all zero
+                    if (setNumbers.Sum() == 0)
+                    {
+                        int setNumber = 1;
+                        foreach (var set in sets)
+                        {
+                            set.SetNumber = setNumber;
+                            setNumber++;
+                        }
+                    }
                 })
                 ;
             
