@@ -138,6 +138,20 @@ namespace ImportLibrary.Tests
         }
 
         [Test]
+        public void GetProblematicTrip([Values(12461, 15073)] int tripId)
+        {
+            using (var session = Observer.DataService.GetSession())
+            {
+                var repo = new Repository<Observer.Entities.Trip>(session);
+                var source = repo.FindBy(tripId);
+                Assert.NotNull(source);
+                Assert.IsInstanceOf<Observer.Entities.PurseSeineTrip>(source);
+                var destination = Mapper.Map<Observer.Entities.Trip, Tubs.Entities.Trip>(source) as Tubs.Entities.PurseSeineTrip;
+                Assert.NotNull(destination);
+            }
+        }
+
+        [Test]
         [Ignore("Turned off while I work out other issues")]
         public void CopyPurseSeineTrip([Values(3831)] int tripId)
         {

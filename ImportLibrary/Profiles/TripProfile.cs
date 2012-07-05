@@ -57,6 +57,12 @@ namespace ImportLibrary.Profiles
                 interaction.Trip = dest;
             }
 
+            // Fix a small problem with the port resolver
+            if (!Spc.Ofp.Tubs.DAL.Common.WorkbookVersion.v2009.Equals(dest.Version))
+            {
+                dest.VesselDeparturePort = null;
+            }
+
             dest.DepartureDateOnly = dest.DepartureDate.AtMidnight();
             dest.DepartureTimeOnly = dest.DepartureDate.TimeOnly();
             dest.ReturnDateOnly = dest.ReturnDate.AtMidnight();

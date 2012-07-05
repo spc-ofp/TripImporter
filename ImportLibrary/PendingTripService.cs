@@ -24,6 +24,12 @@ namespace ImportLibrary
     public class PendingTripService
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(PendingTripService));
+
+        private static ISet<string> GearCodes = new HashSet<string>()
+        {
+            "S",
+            "L"
+        };
         
         protected readonly ISession _sourceSession;
 
@@ -66,9 +72,10 @@ namespace ImportLibrary
             // Temporary check
             var tripType = source.GetType();
             Logger.DebugFormat("Trip type: {0}", tripType);
+            /*
             if (!(typeof(Observer.Entities.LongLineTrip) == tripType) || (typeof(Observer.Entities.PurseSeineTrip) == tripType))
                 return Tuple.Create(false, String.Format("Trip of type {0} not yet supported", tripType));
-
+            */
             try
             {
                 dest = Mapper.Map<Observer.Entities.Trip, Tubs.Entities.Trip>(source);
@@ -159,12 +166,13 @@ namespace ImportLibrary
 
                 pendingTrips = (
                     from trip in query.ToList()
-                    //where "S".Equals(trip.GearCode, StringComparison.InvariantCultureIgnoreCase) // Remove when LL support gets added
+                    where GearCodes.Contains(trip.GearCode) // Keep out pole and line
                     select new TripViewModel
                     {
                         Id = trip.Id,
                         TripNumber = trip.SpcTripNumber,
-                        ShouldCopy = true
+                        ShouldCopy = true,
+                        GearCode = trip.GearCode
                     }
                 ).ToList();
             }

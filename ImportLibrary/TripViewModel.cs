@@ -19,6 +19,7 @@ namespace ImportLibrary
         public virtual string TripNumber { get; set; }
         public virtual DateTime? DepartureDate { get; set; }
         public virtual DateTime? ReturnDate { get; set; }
+        public virtual string GearCode { get; set; }
 
         private bool _shouldCopy;
         public virtual bool ShouldCopy

@@ -58,6 +58,7 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Id}" Header="SourceId" /> 
                 <DataGridTextColumn Binding="{Binding TripNumber}" Header="Trip Number" />
+                <DataGridTextColumn Binding="{Binding GearCode}" Header="Gear Code" />
                 <DataGridCheckBoxColumn Binding="{Binding ShouldCopy}" Header="Copy" />
                 <DataGridTextColumn Binding="{Binding IsSuccessful, Mode=OneWay}" Header="Copy Status" />
                 <DataGridTextColumn Binding="{Binding ImportMessage, Mode=OneWay}" Header="Import Message" Width="*" />
