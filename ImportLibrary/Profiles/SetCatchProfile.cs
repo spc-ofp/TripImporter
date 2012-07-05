@@ -10,6 +10,7 @@ namespace ImportLibrary.Profiles
     using AutoMapper;
     using Observer = Spc.Ofp.Legacy.Observer.Entities;
     using Tubs = Spc.Ofp.Tubs.DAL.Entities;
+    using ImportLibrary.Resolvers;
 
     /// <summary>
     /// TODO: Update summary.
@@ -32,6 +33,8 @@ namespace ImportLibrary.Profiles
                 .ForMember(d => d.Spare1, o => o.Ignore())
                 // Custom mapping               
                 .ForMember(d => d.LandedConditionCode, o => o.MapFrom(s => s.ConditionCode))
+                .ForMember(d => d.SexCode, o => o.ResolveUsing<SexCodeResolver>().FromMember(s => s.SexCode))
+                .ForMember(d => d.GonadStage, o => o.ResolveUsing<GonadStageResolver>().FromMember(s => s.GonadStage))
                 .AfterMap((s, d) =>
                 {
 

@@ -108,6 +108,7 @@
     <Compile Include="Resolvers\ConditionCodeResolver.cs" />
     <Compile Include="Resolvers\DetectionMethodResolver.cs" />
     <Compile Include="Resolvers\FormVersionResolver.cs" />
+    <Compile Include="Resolvers\GonadStageResolver.cs" />
     <Compile Include="Resolvers\InteractionActivityResolver.cs" />
     <Compile Include="Resolvers\JobResolver.cs" />
     <Compile Include="Resolvers\LengthCodeResolver.cs" />
@@ -132,6 +133,7 @@
     <Compile Include="Resolvers\YesNoResolver.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Tests\ActivityTest.cs" />
+    <Compile Include="Tests\BaseStringResolverTest.cs" />
     <Compile Include="Tests\ConversionFactorTest.cs" />
     <Compile Include="Tests\CrewTest.cs" />
     <Compile Include="Tests\ElectronicDeviceTest.cs" />
